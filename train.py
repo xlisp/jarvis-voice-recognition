@@ -154,7 +154,7 @@ def train():
             token_lengths = batch["token_lengths"].to(device, non_blocking=True)
 
             # Forward pass with mixed precision
-            with autocast(device_type="cuda", enabled=use_amp):
+            with autocast(enabled=use_amp):
                 losses = model(audio, audio_lengths, tokens, token_lengths)
                 loss = losses["loss"] / config.train.grad_accumulation
 
@@ -247,7 +247,7 @@ def validate(
         tokens = batch["tokens"].to(device, non_blocking=True)
         token_lengths = batch["token_lengths"].to(device, non_blocking=True)
 
-        with autocast(device_type="cuda", enabled=use_amp):
+        with autocast(enabled=use_amp):
             losses = model(audio, audio_lengths, tokens, token_lengths)
         total_loss += losses["loss"].item()
         num_batches += 1
